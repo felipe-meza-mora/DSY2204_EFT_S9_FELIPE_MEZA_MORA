@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.HelpOutline // Ícono de ayuda
 import androidx.compose.material.icons.sharp.ChatBubble
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -33,14 +34,14 @@ import com.example.dyf.CambioPasswordActivity
 import com.example.dyf.EscribirYHablarActivity
 import com.example.dyf.LoginActivity
 import com.example.dyf.R
-import com.example.dyf.BuscarDispositivoActivity // Activity para la funcionalidad de buscar dispositivo
-import com.example.dyf.EscuchaPorMiActivity
+import com.example.dyf.BuscarDispositivoActivity
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MenuScreen() {
     var expanded by remember { mutableStateOf(false) }
-    var userName by remember { mutableStateOf("Usuario") } // Valor predeterminado
+    var userName by remember { mutableStateOf("Usuario") }
     val context = LocalContext.current
 
     fun vibrate(context: Context, isSuccess: Boolean) {
@@ -186,7 +187,7 @@ fun MenuScreen() {
                 ) {
                     Icon(
                         imageVector = Icons.Sharp.ChatBubble,
-                        contentDescription = "Chat ",
+                        contentDescription = "Chat",
                         modifier = Modifier.size(24.dp),
                         tint = Color.White
                     )
@@ -212,7 +213,28 @@ fun MenuScreen() {
                         tint = Color.White
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Obtener Mí Ubicación", fontSize = 18.sp, color = Color.White)
+                    Text("Obtener Mi Ubicación", fontSize = 18.sp, color = Color.White)
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Botón para acceder al área de ayuda
+                Button(
+                    onClick = {
+                        val intent = Intent(context, AyudaActivity::class.java)
+                        context.startActivity(intent)
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFC107))
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.HelpOutline,
+                        contentDescription = "Ayuda",
+                        modifier = Modifier.size(24.dp),
+                        tint = Color.White
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Ayuda", fontSize = 18.sp, color = Color.White)
                 }
             }
         }
