@@ -36,11 +36,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.util.*
 
-// Modelo de datos para un mensaje
+
 data class Message(
     val content: String = "",
     val email: String = "",
-    val type: String = ""  // "envío" o "recibo"
+    val type: String = ""
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,7 +50,7 @@ fun EscribirYHablarScreen() {
     var text by remember { mutableStateOf("") }
     var textToSpeech by remember { mutableStateOf<TextToSpeech?>(null) }
 
-    // Lista para almacenar el historial tipo chat
+
     val chatHistory = remember { mutableStateListOf<Message>() }
     val database: DatabaseReference = FirebaseDatabase.getInstance().getReference("messages")
 
@@ -58,7 +58,7 @@ fun EscribirYHablarScreen() {
     val userEmail = sharedPreferences.getString("userEmail", "usuario@ejemplo.com") ?: "usuario@ejemplo.com"
 
 
-    // Funciones para enviar mensajes a Firebase
+
     fun sendMessage(text: String) {
         val message = Message(content = text, email = userEmail, type = "envío")
         database.push().setValue(message)
@@ -69,7 +69,7 @@ fun EscribirYHablarScreen() {
         database.push().setValue(message)
     }
 
-    // Lanzador para el reconocimiento de voz
+
     val speechToTextLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -77,13 +77,13 @@ fun EscribirYHablarScreen() {
         if (result.resultCode == android.app.Activity.RESULT_OK && data != null) {
             val resultText = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.get(0)
             if (resultText != null) {
-                // Añadir el mensaje capturado por voz al chat y Firebase
+
                 receiveMessage(resultText)
             }
         }
     }
 
-    // Escuchar los cambios en Firebase en tiempo real para mostrar el historial
+
     LaunchedEffect(Unit) {
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -153,7 +153,7 @@ fun EscribirYHablarScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Historial tipo chat (con burbujas)
+
         val listState = rememberLazyListState()
 
         LazyColumn(
@@ -170,12 +170,12 @@ fun EscribirYHablarScreen() {
         }
 
 
-// Scroll automático al último mensaje cuando se añade un nuevo mensaje
+
         LaunchedEffect(chatHistory.size) {
             listState.animateScrollToItem(0)
         }
 
-        // Descripción de la pantalla
+
         Text(
             text = "Escribe un mensaje o usa el micrófono.",
             fontSize = 18.sp,
@@ -185,7 +185,7 @@ fun EscribirYHablarScreen() {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Campo de texto para escribir
+
         OutlinedTextField(
             value = text,
             onValueChange = { text = it },
@@ -202,7 +202,7 @@ fun EscribirYHablarScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Botón para "Habla por Mí"
+
         Button(
             onClick = {
                 if (text.isNotBlank()) {
@@ -228,7 +228,7 @@ fun EscribirYHablarScreen() {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Botón para "Escuchar por Mí"
+
         Button(
             onClick = {
                 val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
@@ -256,22 +256,22 @@ fun EscribirYHablarScreen() {
 
 @Composable
 fun ChatBubble(message: Message) {
-    // Diferenciar entre "envío" y "recibo" para el color y alineación del chat
+
     val isSentMessage = message.type == "envío"
 
-    // Colores diferentes para los tipos de mensaje
+
     val backgroundColor = if (isSentMessage) Color(0xFF2196F3) else Color(0xFFFFC107)
     val textColor = if (isSentMessage) Color.White else Color.Black
     val alignment = if (isSentMessage) Alignment.CenterEnd else Alignment.CenterStart
 
-    // Determinamos el ícono según el tipo de mensaje
+
     val icon = if (isSentMessage) Icons.Default.Campaign else Icons.Default.Mic
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp),
-        contentAlignment = alignment // Cambiar según el tipo de mensaje
+        contentAlignment = alignment
     ) {
         Surface(
             modifier = Modifier
@@ -284,7 +284,7 @@ fun ChatBubble(message: Message) {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(8.dp)
             ) {
-                // Mostrar el ícono correspondiente
+
                 Icon(
                     imageVector = icon,
                     contentDescription = if (isSentMessage) "Habla por Mí" else "Escucha por Mí",
@@ -293,7 +293,7 @@ fun ChatBubble(message: Message) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = message.content,  // Mostrar el contenido del mensaje
+                    text = message.content,
                     color = textColor,
                     fontSize = 16.sp,
                     maxLines = 5,
