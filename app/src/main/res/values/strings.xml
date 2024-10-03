@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Sonido Inclusivo</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_registrrate">RegistrrateActivity</string>
+    <string name="title_activity_registrarse">RegistrarseActivity</string>
+    <string name="title_activity_olvidaste">OlvidasteActivity</string>
+    <string name="title_activity_menu">MenuActivity</string>
+    <string name="title_activity_cambio_password">CambioPasswordActivity</string>
+    <string name="title_activity_escribir_yhablar">EscribirYHablarActivity</string>
+    <string name="title_activity_buscar_dispositivo">BuscarDispositivoActivity</string>
+    <string name="title_activity_escucha_por_mi">EscuchaPorMiActivity</string>
+</resources>
